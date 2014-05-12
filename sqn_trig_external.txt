@@ -1,0 +1,14 @@
+# Sequencer for external trigger
+# For RHIC the total number of beam clocks should be 128
+#
+0x20	#  FEMODE
+0xE0	#  PARST + FEMODE
+0x20	#  FEMODE
+#0x1007C	#  delay 0x7C clocks, similar to RHIC revolution
+0x10800 # 3.2ms
+#0x11800 #  ~16ms
+#0x12000 # ~52ms
+#0x13000 # ~100ms # With Bias ON, the preamp will saturate at 200ms
+##0x1f000 #  ~1Hz
+0x20	#  FEMODE
+0x20000	# End of list

@@ -1,0 +1,62 @@
+  2013-09-10	AS
+* External trigger and DAQ interface controls.
+  SVX4 downloading file changed from fem.fem to SVX_config.txt
+  Changing between Internal and External trigger will automatically re-load the sequencer 
+  using correspondig files: sqn_trig_internal.txt or sqn_trig_external.txt
+  Diring Load Sequenser operation the verbosity dropped to avoid lengthy OKs.
+
+  2013-09-12	AS
+* The output data file (when RS232 mode is selected) is changed to binary *.dq4 format
+  for compatibility with the files, written in USB mode).
+  Removed control of FPGA analog subsytem.
+  Corrected wrong messaging when stopping the run, which was not started.
+ 
+  2013-10-04	AS
+* sqn_trig_internal.txt: Uncommented Readout command 0x28. It is needed when working with the carrier board.
+  dsvxtb.py:	Cosmetic changes
+
+  2013-10-07	AS
+* Added Slave CSR configuration
+  Default verbosity changed to 3.
+
+  2013-10-07	AS
+* Improved Slave CSR handling, Version, switches are separated.
+  - Color coding of Version, Switches and Downloading.
+  - During Slave CSR the python extracts the CSR bits from the serial input.
+  - Downloading loos for 'Calstrobe sent ' to turn it green
+
+  2013-10-29	AS
+* v10 Checkbox Pedestal removed, Calibration added. CN color turned red when Channel Numbers released
+Per-line handshaking with DAQ is introduced for RS232 interface.
+The Record separator is changed from '$' to '\x1E'
+The DAQ is sending acknowledge '\x6' for each line
+This version works for dsvxtb-v119-105 and higher.
+
+  2013-10-30	AS
+* Filenames and writing progress in information window.
+
+   2013-11-01  AS
+*  Correct the setting of number of modules to read in Start DAQ
+version = 12
+
+   2013-11-07  AS
+*  Removed READOUT (0x28) command from the sqn_pedestals.txt, CARB-v16 does it
+automatically, 12 FEClocks after BEMODE.
+
+   2013-12-10  AS
+*  Replaced Slave CSR sequence with o0 command
+version = 13
+
+   2014-01-02  AS
+*  Multiple carrier boards
+version = 14
+
+   2014-01-10  AS
+*  Slave Reset
+version = 15
+
+   2014-01-14  AS
+*  Sequencer reset.
+version = 15
+
+

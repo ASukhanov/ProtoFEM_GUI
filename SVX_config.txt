@@ -1,0 +1,69 @@
+# Last updated 04/21/2014
+# Mask changed 
+#------ Beginning of chip ------------------------------------
+#------------- Front end Bit Assignments ---------
+#0:127 Mask[127:0] Cal mask or channel disable register
+#01234567890123456789012345678901234567890123456789
+#    /   /   /   /   /   /   /   /   /   /   /   /   /   /   /   
+ 0000000100000010000000010000001000000001000000100000000100000010
+ 0000000100000010000000010000001000000001000000100000000100000010
+#128 spare
+ 0
+#129 VCAL. Connects VCAL pad to internal voltage divider
+ 1  
+#130 Disable. Mask reg act as channel disable 1 or cal mask reg 0
+ 0 
+#131:134 BW[0:3]. Preamp risetime adjustment. Default 0011. A vs BW:
+#137[0000] 98[0010] 83[0001] 73[0101 65[0011] 55[1111]
+ 0000
+#135:138 Isel[0:3]. Preamp input FET bias current adjustment. Def.=0001
+ 0001
+#139:140 IWsel[0:1]. Pipeline write amp bias currint adj. Default 10. No effect.
+ 10
+#141:142 IRsel[0:1]. Pipeline read amp bias current adj. Default 10.
+ 10
+#143:148 PickDel[0:5]. Trigger latency. It corresponds to JR1
+# for .u i 0x38002584 the PicDel should be 011000
+ 011000
+#149 PB Pipeline readout order; 0=pedestal,signal, 1=signal,pedestal
+ 0
+#------------- Back end bit Assignments ----------
+#150:156 ID[6:0]
+ 0010000
+#157 RTPS. Real Time Pedestal Subtraction disable
+ 1
+#158 Rd127. Always readout ch.127 regardless of hit status
+ 1
+#159 Rd63. Always readout ch.63 regardless of hit status 
+ 1
+#160 RdAll Allways readout all channels
+ 1 
+#161 RdNeigh Readout hit channels and their neighbors
+ 1
+#162:165 RampPed[0:3] ADC ramp pedestal setting. Def.=0101
+# @RampRng=000 1110=21, 0001=18, 1001=14, 0101=10, 1101=-5 
+# 0001
+0101
+#166 RampDir ADC ramp direction; 0=ramp up
+ 0 
+#167 CompPol Comparator polarity; 
+ 0 
+#168:170 RampRng[0:2] ADC ramp range, adjusts slope of ramp
+# for standard test pulse (VCAL=1) amplitude =1.26V
+# the pulse-pedestal for different setting of RampRng:
+#000=20, 100=64, 010=64, 110=98, 001=43, 101=84, 011=84, 111=112.  
+# 02/24/14 11:00 changed from 111 to 100
+# 03/10/14 11:00 changed to 000 for tests with CARB
+ 000
+#171:178 Thresh[7:0]
+ 00000001
+#179:186 CntrMod[7:0] Counter modulo. Gray code.
+ 10000000
+#187 FC First Chip flag; enables the first chip to drive ODBV
+ 0 
+#188 LC Last Chip flag; enables the last chip to drive OBDV
+ 0
+#189:191 DriverI[2:0] Output driver current select
+#  If it is below 011 the data would be corrupted.
+ 111
+#---- End of the chip -------------------------------------------- 

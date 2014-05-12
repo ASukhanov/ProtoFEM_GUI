@@ -1,0 +1,45 @@
+#Sequencer file, executed for internal trigger source
+#	2013-10-07	AS
+#* Version 1
+#
+0x20	#  FEMODE
+#0x20	#  FEMODE
+0x10010	# repeat previous command 16 times
+#0x10400 # 0.9ms
+#0x10800 # 3.2ms
+#0x11000 # 13ms
+#0x12000 #  ~52ms
+#
+# event 1
+0x20	#  FEMODE
+0xE0	#  PARST + FEMODE
+0x20	#  FEMODE
+# The CalSR and L1 should not be too close to PARst
+0x10008	#  1008 - good. at 14000(200ms?) preamp saturates.
+0x60	#  CALSR + FEMODE	// calibration pulse.
+0x20	#  FEMODE
+0x10003	#  delay 3 clocks 
+# Observation: L1 needs to be at least 10 clocks after the PARst
+0xA0	#  L1 + FEMODE
+#0x20	#  FEMODE
+0x30	#  DIG + FEMODE
+0x20	#  FEMODE
+0x10038	#  delay 0x38 (>0x30) clocks to finish digitization and writing
+#0x28	#  Readout + FEMODE, DO NOT USE IT! Done automatically.
+0x20	#  FEMODE
+0x10100	# delay for 128 clocks. The real transfer finishes 17us after the rising BEMODE
+0x20	#  FEMODE
+# Limit the data taking rate
+0x10800 # 3.2ms	#300Hz, works OK with serial interface
+#0x10a00 #
+#0x11800 #  ~16ms
+#0x12000 # ~52ms
+#0x1f000 #  ~1Hz
+#
+# Finish
+0x20	#  FEMODE
+#0x1ffff # 0x1ffff gives ~2s delay
+0x20	# the command before end cannot be the delay command
+0x20000	# End of list
+0x000	# The commands after End Of List will not be executed
+0x000	# 
