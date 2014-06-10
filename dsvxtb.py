@@ -77,7 +77,14 @@
 #   2014-04-08  AS
 #*  Dealing with FEM simulator 
 
-version = 17
+#   2014-06-03  AS
+#*  config.py
+
+#   2014-06-06  AS
+#*  FEM_ID
+#version = 18
+
+version = 18
 
 import sys
 #from time import sleep
@@ -94,21 +101,29 @@ import platform
 import glob
 from array import array
 
-#data_directory = "../../data/"
-data_directory = "D:/data/"
-#slave_work = 4
-
 try:
     from dsvxtb_ui import Ui_dsvxtb
 except:
     print("dsvxtb_ui.pyc does not exist, to generate it use: \npyuic4 dsvxtb.ui -o dsvxtb_ui.py")
     sys.exit()
 
-# Any dynamic configurations assumed to be in dsvxtb_config.
+# Any dynamic configurations assumed to be in config.py
 # It is not used in version 3 or above
-#import dsvxtb_config
-#g = dsvxtb_config.Config()
-#myCOMPort = g.Run_COM_Port
+import config
+g = config.Config()
+data_directory = g.data_directory
+print('data directory: '+data_directory)
+serial_device = g.serial_device
+print('serial device: '+g.serial_device)
+
+#^^^^^^^^ globals
+# HDR_FEMId is temporary, it should be handled inside the FPGA
+HDR_FEMId = 0xff
+HDR_ChainMask = 1
+#________
+
+def APB_Slave(bank,offset):	#returns the register index of the DSVXTB APB slaves
+	return bank*64 + offset*4
 
 def reverseBits(original,numbits):
         return sum(1<<(numbits-1-i) for i in range(numbits) if original>>i&1)
@@ -228,12 +243,10 @@ def list_serial_ports():
             except serial.SerialException:
 		pass
         return available
-    elif system_name == "Darwin":
-        # Mac
-        return glob.glob('/dev/tty*') + glob.glob('/dev/cu*')
     else:
         # Assume Linux or something else
-        return glob.glob('/dev/ttyUSB*') # + glob.glob('/dev/ttyS*')
+	serial_device = g.serial_device
+        return glob.glob(serial_device) # + glob.glob('/dev/ttyS*')
 
 class myControl(QtGui.QMainWindow):
     #helper functions
@@ -321,6 +334,7 @@ class myControl(QtGui.QMainWindow):
         # Fill the Interface items
         self.ui.my_DAQ_Interface.insertItem(0,'RS232')
         self.ui.my_DAQ_Interface.insertItem(1,'TLINK')
+        #TLINK on Rev2 boards = SPI on rev1 and rev0 boards
         self.ui.my_DAQ_Interface.setCurrentIndex(0)
 
 	# Fill trigger sources
@@ -550,6 +564,7 @@ class myControl(QtGui.QMainWindow):
             self.ui.my_Download.setStyleSheet("QPushButton { background-color : rgb(255,100,100); color : black; }")
             txtx='Download FAILED'
         self.updateTxt('host: '+txtx)
+	print(txtx)
 
     def my_check_sequenser(self):
         # check if sequenser was loaded
@@ -603,11 +618,10 @@ class myControl(QtGui.QMainWindow):
 	mode |= (src&0x3)<<4
 
 	# set the number of modules to read
-	nMods = int(self.ui.my_NSVX4.text())
-	print('DAQ will read '+str(nMods)+' SVX4s')
-	#self.ser.write('w64 ' + str((nMods<<4)|slave_work) + ' ')
-	#self.ser.write('w64 ' + str((nMods<<4)) + ' ')
-	self.reg_Write(64,nMods<<4)
+	HDR_NChips = int(self.ui.my_NSVX4.text())
+	print('DAQ will read '+str(HDR_NChips)+' SVX4s')
+	self.reg_Write(APB_Slave(1,0),((HDR_ChainMask & 0xf) | (HDR_NChips & 0xff)<<4))
+	self.reg_Write(APB_Slave(1,3),(HDR_FEMId & 0x3f))
 	#
 	ostr += " " + str(mode) + " "
         #self.DAQ_running = 1
@@ -797,14 +811,14 @@ class myControl(QtGui.QMainWindow):
                 for i1 in range(reg[ii]&0x3f):
                     val = val<<1
                     val |= 1
-                self.reg_Write(68,val)
+                self.reg_Write(APB_Slave(1,1),val)
                 #nSVX += switches[ii]&0x3F
                 nSVX += reg[ii]&0x3F
             else:
                 print('normal mode')
                 # load header 'ROC enabled' bits HDR.BEM0
                 val = (~switches[ii])&0x03f
-                self.reg_Write(68,val)
+                self.reg_Write(APB_Slave(1,1),val)
                 #update number of SVXs
                 nSVX += 2*bin(val).count('1')
             print('nSVX='+str(nSVX)+'\n')
