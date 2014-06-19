@@ -1,6 +1,6 @@
-/*
-*   SPI Recorder
-*   2014-06-14 Andrey Sukhanov. Version 1
+/* SPI reader
+*
+*   2014-06-18  AS
 */
 
 #include <stdio.h>
@@ -66,6 +66,8 @@ void dumpbuf(unsigned char *buf, int nbytes)
 int trim_event(unsigned char *data)
 #define EVOFFSET 4
 {
+    // Trim event to the length, calculated from the header.
+    // Return event length or -1 when stop run is found.
     int evl=0;
     int fevhl=0, fevtl=0, fevnasics=0, fevchains=0;
     #define BYTES_PEE_ASIC 129
@@ -74,6 +76,7 @@ int trim_event(unsigned char *data)
     if(data[4] == 0)    return 0;
     if(data[4] != 0xf0 || data[5] != 0xc1) 
     {
+        if(data[0]==0xff && data[1]==0xff) return -1;   //all ff's - run stopped
         printf("ERROR in event format, event %d, ID: %02x%02x\n",gEvN,data[4],data[5]);
         return 0;
     }
@@ -202,8 +205,16 @@ int main(int argc, char **argv)
             if(delay)   delay_ms(delay);
             if(trim_events) rc = trim_event(buf);
             pdata = buf + EVOFFSET;
-            if(rc==0)  continue;
-            gEvN++;
+            if(rc ==  0)  continue;
+            if(rc == -1)
+            {
+                if(gEvN != 0)  
+                {
+                    printf("Run %s stopped by operator after %i events\n",filename,gEvN);
+                    break;   //run stopped
+                }
+            }
+            else gEvN++;
             if(verbosity&2) printf("Event %i[%i]\n",gEvN,rc);
             if(verbosity&4) dumpbuf(pdata, rc);
             if(ff) fwrite(pdata,1,rc,ff);

@@ -84,7 +84,11 @@
 #*  FEM_ID
 #version = 18
 
-version = 18
+#   2014-06-16  AS
+#   Added SPI support
+#version 19
+
+version = 19
 
 import sys
 #from time import sleep
@@ -164,8 +168,9 @@ class SleepPrint(QtCore.QThread):
 				self.line.emit(txtout)
 				self.sfil.close()
 			except:
-                            print('ERROR Data for closed file:'+txt[1:])
-			    continue
+                    	    if (myapp.ui.my_DAQ_Interface.currentText() == 'RS232'):
+                                print('ERROR Data for closed file:'+txt[1:])
+                        continue
 			# for windows
 			if self.streaming_in_progress == 1:	# launch the command to plot the chipskop data
                             os.system('start /B python waveplot_logic_hex.py '+self.sfil.name)
@@ -334,7 +339,7 @@ class myControl(QtGui.QMainWindow):
         # Fill the Interface items
         self.ui.my_DAQ_Interface.insertItem(0,'RS232')
         self.ui.my_DAQ_Interface.insertItem(1,'TLINK')
-        #TLINK on Rev2 boards = SPI on rev1 and rev0 boards
+        self.ui.my_DAQ_Interface.insertItem(2,'SPI')
         self.ui.my_DAQ_Interface.setCurrentIndex(0)
 
 	# Fill trigger sources
@@ -609,6 +614,8 @@ class myControl(QtGui.QMainWindow):
 	#    mode |= 2
 	if (self.ui.my_DAQ_Interface.currentText() == 'TLINK'):
 	    mode |= 4
+        if (self.ui.my_DAQ_Interface.currentText() == 'SPI'):
+            mode |= 4   #same setting as with TLINK
 	if self.ui.my_Channel_Numbers.checkState():
 	    mode |= 8
 	src = self.ui.my_DAQ_ExTrig.currentIndex()
@@ -628,14 +635,15 @@ class myControl(QtGui.QMainWindow):
         self.scmd(ostr)
         
     def my_DAQ_Stop(self):
-	self.ui.my_DAQ_ExTrig.setEnabled(True)
-	self.ui.my_Channel_Numbers.setEnabled(True)
-	self.ui.my_DAQ_Interface.setEnabled(True)
-	self.ui.my_Download.setEnabled(True)
-	self.ui.my_Load_Sequencer.setEnabled(True)
-	mode = 0x8000
-	ostr = "q0 " + str(mode) + " "
-	#self.DAQ_running = 0
+        self.ui.my_DAQ_ExTrig.setEnabled(True)
+        self.ui.my_Channel_Numbers.setEnabled(True)
+        self.ui.my_DAQ_Interface.setEnabled(True)
+        self.ui.my_Download.setEnabled(True)
+        self.ui.my_Load_Sequencer.setEnabled(True)
+        self.reg_Write(2,0x04000000) #clear TLINK/SPI enable bit. (Logically it is better be done inside firmware.)
+        mode = 0x8000
+        ostr = "q0 " + str(mode) + " "
+#self.DAQ_running = 0
         self.scmd(ostr)
         
     def MasterReset(self):
