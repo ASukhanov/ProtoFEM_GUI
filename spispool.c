@@ -74,6 +74,7 @@ int trim_event(unsigned char *data)
 
     data += EVOFFSET; //skip 2 empty bytes
     if(data[4] == 0)    return 0;
+    //check if header is correct
     if(data[4] != 0xf0 || data[5] != 0xc1) 
     {
         if(data[0]==0xff && data[1]==0xff) return -1;   //all ff's - run stopped
@@ -86,6 +87,11 @@ int trim_event(unsigned char *data)
     fevchains = data[3]&0xf;
     evl = (fevhl + fevtl + gExtraWords)*2 + fevnasics*BYTES_PEE_ASIC;
     if(verbosity&8) printf("hl=%i. tl=%i, na=%i, nc=%i, el=%i\n",fevhl, fevtl, fevnasics, fevchains, evl); 
+    //check, if trailer is correct
+    if((data[evl-4] != 0xfe) || (data[evl-3] != 0x0d))
+    {
+        printf("ERROR. Event trailer wrong %02x%02x != fe0d\n",data[evl-4],data[evl-3]);
+    }
     return evl;
 }
 
