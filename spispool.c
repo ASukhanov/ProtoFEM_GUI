@@ -99,8 +99,6 @@ int main(int argc, char **argv)
 {
     int rc;
     int nFiles=1, nEvents=1, nBytes=512;
-    #define FNSIZE 128
-    char fileName[FNSIZE];
     #define BUFSIZE 2048
     unsigned char buf[BUFSIZE];
     unsigned char *pdata = buf;
@@ -109,14 +107,17 @@ int main(int argc, char **argv)
     int trim_events = 0;
     int writing_enabled = 1;
     FILE *ff = NULL; 
+    int filesize = 0;
     time_t tmt;
     struct tm * timeptr;
     int delay=0;
     int arg;
     #define FNSIZE 128
     char filename[FNSIZE] ={0};
+    char pathname[FNSIZE] ={0};
     #define DNSIZE 40
     char dirname[DNSIZE];
+    char lastfn[40];
     
     strncpy(dirname,gDirName,DNSIZE);
     for (arg = 1; arg < argc; arg++)
@@ -193,15 +194,22 @@ int main(int argc, char **argv)
         {
             time(&tmt);
             timeptr = localtime(&tmt);
-            snprintf(filename,FNSIZE,"%s%.2d%.2d%.2d%.2d%.2d%.2d.dq4",
-                dirname,
+            snprintf(filename,FNSIZE,"%.2d%.2d%.2d%.2d%.2d%.2d.dq4",
                 timeptr->tm_year-100,
                 timeptr->tm_mon+1,
                 timeptr->tm_mday, timeptr->tm_hour,
                 timeptr->tm_min,timeptr->tm_sec);
-            ff = fopen(filename,"w");
+	    strcpy(pathname,dirname);
+	    strncat(pathname,filename,FNSIZE-strlen(dirname));
+            ff = fopen(pathname,"w");
+	    if(ff==NULL) 
+	    {
+		printf("ERROR opening file %s\n",pathname);
+		strcpy(pathname,"not open");
+		exit(-2);
+	    }
         }
-        if(verbosity&1) printf("File %s, %i files to go.\n",filename,nFiles);
+        if(verbosity&1) printf("File %s, %i files to go.\n",pathname,nFiles);
         
         for(gEvN=0;gEvN<nEvents;)
         {
@@ -228,12 +236,15 @@ int main(int argc, char **argv)
         //printf("OK\n");
         if(ff) 
         {
+            fseek(ff,0L,SEEK_END);
+            filesize = ftell(ff);
             fclose(ff);
             // Inform analyzer that we have a fresh file
-            snprintf(filename,FNSIZE,"%sdaqcapture.dq0",dirname);
-            ff = fopen(filename,"w");
+            snprintf(lastfn,40,"%sdaqcapture.dq0",dirname);
+            ff = fopen(lastfn,"w");
             fwrite(filename,1,strlen(filename),ff);
             if(ff) fclose(ff);
+            printf("File %s[%i] written\n",filename,filesize);
         }
     }
     spi_close();
