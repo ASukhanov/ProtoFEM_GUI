@@ -241,20 +241,15 @@ int main(int argc, char **argv)
             }
             else gEvN++;
             if(gEvN == 1) printf("DAQ run started\n");
-            if((gEvN % 100)==0)
+            if((gEvN % 100)==1)
             {
-                //printf("gEvn=%i\n",gEvN);
                 time(&curtim);
                 seconds = difftime(curtim,tmt);
-                //curMillis = millis();
-                //diffMillis = ((double)curMillis - (double)prevMillis)/1000.;
-                //printf("gEvn=%i, %f s, %f, %f\n",gEvN, diffMillis,curMillis,prevMillis);
 		if(seconds>=10.) 
                 {
                    tmt = curtim;
                    if(verbosity&1) printf("Event %i[%i], %.1f ev/s\n",gEvN,rc,(double)(gEvN-prevEvN)/seconds);
                    prevEvN=gEvN;
-	           //prevMillis = curMillis;
                 }
             }
             if(rc<=0) continue;
