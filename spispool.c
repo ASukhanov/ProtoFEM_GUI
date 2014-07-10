@@ -1,7 +1,8 @@
 /* SPI reader
 *
-*   2014-06-18  AS
+*   2014-07-10  AS, Version 1.
 */
+char* gVersion = "1";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,9 +49,9 @@ char *gDirName = "/run/shm/";
 typedef unsigned short WORD;
 typedef unsigned long DWORD;
 
-unsigned int gEvN = 0;
+int gEvN = 0;
 int gExtraWords = 0;
-int verbosity = 0;
+int verbosity = 1;
 
 void dumpbuf(unsigned char *buf, int nbytes)
 {
@@ -98,7 +99,8 @@ int trim_event(unsigned char *data)
 int main(int argc, char **argv)
 {
     int rc;
-    int nFiles=1, nEvents=1, nBytes=512;
+    int nFiles=1, nEvents=0;
+    int nBytes=290; //2 SVX4s + 4 
     #define BUFSIZE 2048
     unsigned char buf[BUFSIZE];
     unsigned char *pdata = buf;
@@ -108,9 +110,11 @@ int main(int argc, char **argv)
     int writing_enabled = 1;
     FILE *ff = NULL; 
     int filesize = 0;
-    time_t tmt;
+    time_t tmt,curtim;
+    double seconds;
+    int prevEvN=0;
     struct tm * timeptr;
-    int delay=0;
+    int delayEv=5;
     int arg;
     #define FNSIZE 128
     char filename[FNSIZE] ={0};
@@ -118,6 +122,7 @@ int main(int argc, char **argv)
     #define DNSIZE 40
     char dirname[DNSIZE];
     char lastfn[40];
+    //unsigned int prevMillis=0,curMillis,diffMillis;
     
     strncpy(dirname,gDirName,DNSIZE);
     for (arg = 1; arg < argc; arg++)
@@ -139,17 +144,18 @@ int main(int argc, char **argv)
                 sscanf(&argv[arg][2], "%ld", &nEvents);
                 break;
             case 'T':
-                printf("Trimming enabled\n");
+                printf("Trimming enabled.\n");
                 trim_events = 1;
                 break;
             case 'W':
                 writing_enabled = 0;
+                printf("Recording disabled.\n");
                 break;                          
             case 'H':
                 help = 1;
                 break;
             case 'P':
-                sscanf(&argv[arg][2], "%ld", &delay);
+                sscanf(&argv[arg][2], "%ld", &delayEv);
                 break;
             case 'S':
                 sscanf(&argv[arg][2], "%ld", &spi_speed);
@@ -159,6 +165,7 @@ int main(int argc, char **argv)
                 break;
             case 'X':
                 sscanf(&argv[arg][2], "%ld",&gExtraWords);
+		printf("Expecting %i extra words in event.\n",gExtraWords);
                 break;
             default:
                 break;
@@ -166,33 +173,37 @@ int main(int argc, char **argv)
         }
         if(help)
         {
-            printf("SPI Recorder\n");
+            printf("SPI Recorder for Raspberry Pi, version %s\n",gVersion);
             printf("Usage:  spispool [options]\n");
             printf( "   Available options:\n");
             printf( "   -h  : show help message\n");
             printf( "   -vN : verbosity level\n");
-            printf( "   -fN : number of files to read\n");
+            printf( "   -fN : number of files to read, default: 1\n");
             printf( "   -eN : number of transfers (events)per file\n");
-            printf( "   -lN : max length of the transfer\n");
+            printf( "   -lN : max length of the transfer, default: %i\n",nBytes);
             printf( "   -PN : pause between events in milliseconds\n");
-            printf( "   -sN : SPI clock frequency 500,000 through 32,000,000\n");
+            printf( "   -sN : SPI clock frequency 500,000 (default) through 32,000,000\n");
             printf( "   -t  : trim events to correct size\n");
             printf( "   -w  : disable writing to file\n");
-            printf( "   -dT : data directory\n");
+            printf( "   -dT : data directory, default: /run/shm\n");
             printf( "   -xN : number of extra words in the event\n");
+            return(0);
         }
     }
-    printf("Recording %i files with %i events[%i] per file ",nFiles,nEvents,nBytes);
-    if(writing_enabled) printf(" to directory %s",dirname);
-    printf("\n");
+    if(writing_enabled) 
+        printf("Recording %i files with %i events[%i] per file to directory %s\n",nFiles,nEvents,nBytes,dirname);
     spi_open(spi_channel,spi_speed);
+    printf("Delay between events %i ms.\n",delayEv);
+    printf("Verbosity %i.\n",verbosity);
 
     for(nFiles;nFiles>0;nFiles--)
     {
+	prevEvN = 0;
+	time(&tmt);
+        //prevMillis = millis();
         if(nEvents<1) nEvents = 1;
         if (writing_enabled)
         {
-            time(&tmt);
             timeptr = localtime(&tmt);
             snprintf(filename,FNSIZE,"%.2d%.2d%.2d%.2d%.2d%.2d.dq4",
                 timeptr->tm_year-100,
@@ -210,30 +221,47 @@ int main(int argc, char **argv)
 	    }
         }
         if(verbosity&1) printf("File %s, %i files to go.\n",pathname,nFiles);
-        
-        for(gEvN=0;gEvN<nEvents;)
+        for(gEvN=-1;gEvN<nEvents;)
         {
             if(verbosity&8) printf("record %i\n",gEvN);
             rc = spi_read(spi_channel,buf,nBytes);
             if(verbosity&8) dumpbuf(buf, rc);
-            if(delay)   delay_ms(delay);
+            if(delayEv)   delay_ms(delayEv);
             if(trim_events) rc = trim_event(buf);
             pdata = buf + EVOFFSET;
             if(rc ==  0)  continue;
             if(rc == -1)
             {
-                if(gEvN != 0)  
+                if(gEvN > 0)  
                 {
-                    printf("Run %s stopped by operator after %i events\n",filename,gEvN);
+                    printf("DAQ run %s stopped by operator after %i events\n",filename,gEvN);
                     break;   //run stopped
                 }
+                if(gEvN < 0) { gEvN = 0 ; printf("DAQ run not started\n");}
             }
             else gEvN++;
+            if(gEvN == 1) printf("DAQ run started\n");
+            if((gEvN % 100)==0)
+            {
+                //printf("gEvn=%i\n",gEvN);
+                time(&curtim);
+                seconds = difftime(curtim,tmt);
+                //curMillis = millis();
+                //diffMillis = ((double)curMillis - (double)prevMillis)/1000.;
+                //printf("gEvn=%i, %f s, %f, %f\n",gEvN, diffMillis,curMillis,prevMillis);
+		if(seconds>=10.) 
+                {
+                   tmt = curtim;
+                   if(verbosity&1) printf("Event %i[%i], %.1f ev/s\n",gEvN,rc,(double)(gEvN-prevEvN)/seconds);
+                   prevEvN=gEvN;
+	           //prevMillis = curMillis;
+                }
+            }
+            if(rc<=0) continue;
             if(verbosity&2) printf("Event %i[%i]\n",gEvN,rc);
             if(verbosity&4) dumpbuf(pdata, rc);
             if(ff) fwrite(pdata,1,rc,ff);
         }
-        //printf("OK\n");
         if(ff) 
         {
             fseek(ff,0L,SEEK_END);

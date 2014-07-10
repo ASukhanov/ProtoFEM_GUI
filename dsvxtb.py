@@ -88,7 +88,7 @@
 #   Added SPI support
 #version 19
 
-version = 19
+version = 19.1
 
 import sys
 #from time import sleep
@@ -340,7 +340,7 @@ class myControl(QtGui.QMainWindow):
         self.ui.my_DAQ_Interface.insertItem(0,'RS232')
         self.ui.my_DAQ_Interface.insertItem(1,'TLINK')
         self.ui.my_DAQ_Interface.insertItem(2,'SPI')
-        self.ui.my_DAQ_Interface.setCurrentIndex(0)
+        self.ui.my_DAQ_Interface.setCurrentIndex(2)
 
 	# Fill trigger sources
         self.ui.my_DAQ_ExTrig.insertItem(0,'CLK')
@@ -404,7 +404,7 @@ class myControl(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.my_DAQ_Interface,QtCore.SIGNAL("activated(QString)"),self.my_DAQ_Interface)
         QtCore.QObject.connect(self.ui.my_Slave_CSR,QtCore.SIGNAL("clicked()"),self.my_Slave_CSR)
         QtCore.QObject.connect(self.ui.my_TrigFreq,QtCore.SIGNAL("activated(QString)"),self.my_TrigFreq)
-        QtCore.QObject.connect(self.ui.my_Old_CARB,QtCore.SIGNAL("released()"),self.my_Old_CARB)
+#        QtCore.QObject.connect(self.ui.my_Old_CARB,QtCore.SIGNAL("released()"),self.my_Old_CARB)
         QtCore.QObject.connect(self.ui.my_CARB_Sim,QtCore.SIGNAL("released()"),self.my_CARB_Sim)
         
         # Start threads
@@ -682,14 +682,10 @@ class myControl(QtGui.QMainWindow):
         self.ui.my_Load_Sequencer.setStyleSheet("QPushButton { background-color : rgb(128,255,128); color : black; }")
 	
     def my_DAQ_Interface(self):
-	if (self.ui.my_DAQ_Interface.currentText() == 'TLINK'):
-	    print("Data destination interface changed to TLINK")
-	    self.ui.my_DAQ_NEvents.setEnabled(False)
- 	    #self.ui.my_DAQ_Writing.setEnabled(False)
- 	else:
-	    print("Data destination interface changed to RS232")
+	if (self.ui.my_DAQ_Interface.currentText() == 'RS232'):
 	    self.ui.my_DAQ_NEvents.setEnabled(True)
- 	    #self.ui.my_DAQ_Writing.setEnabled(True)
+ 	else:
+	    self.ui.my_DAQ_NEvents.setEnabled(False)
  	    
     def my_DAQ_ExTrig(self):
 	self.my_Load_Sequencer()
@@ -836,15 +832,12 @@ class myControl(QtGui.QMainWindow):
             time.sleep(.1)
             print(txtx)
             self.updateTxt('host: '+txtx) #this will appear before the printout of 'r64 '
+
     def my_TrigFreq(self):
 	src = self.ui.my_TrigFreq.currentIndex()
 	print('TrigFreq='+str(src))
 	self.reg_Write(384,src)
-    def my_Old_CARB(self):
-	if self.ui.my_Old_CARB.checkState():
-            self.reg_Write(1,0x2000)    # set bit
-	else:
-            self.reg_Write(2,0x2000)    # clear bit
+
     def my_CARB_Sim(self):
 	if self.ui.my_CARB_Sim.checkState():
             self.reg_Write(72,int(str(self.ui.my_SlaveCSR.text()),16))

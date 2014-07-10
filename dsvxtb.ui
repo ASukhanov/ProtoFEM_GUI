@@ -195,6 +195,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="my_DAQ_NEvents">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>170</x>
@@ -721,7 +724,7 @@ Depending on setting of External trigger the file is sqn_trig_external.txt of sq
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>250</y>
+       <y>240</y>
        <width>111</width>
        <height>16</height>
       </rect>
@@ -1318,36 +1321,12 @@ Bit [6]: 0 for sending ADC values, 1 - for channel numbers </string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ClkSource&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="my_Old_CARB">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>255</y>
-       <width>51</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Carrire boards with old (v17) firmware </string>
-     </property>
-     <property name="text">
-      <string>Old</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
     <widget class="QCheckBox" name="my_CARB_Sim">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>255</y>
-       <width>41</width>
+       <x>210</x>
+       <y>240</y>
+       <width>81</width>
        <height>17</height>
       </rect>
      </property>
@@ -1360,10 +1339,28 @@ Bit [6]: 0 for sending ADC values, 1 - for channel numbers </string>
       <string>Turn on simulator on the carrier board</string>
      </property>
      <property name="text">
-      <string>Sim</string>
+      <string>Simulate</string>
      </property>
      <property name="checked">
       <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="Line" name="line_11">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>228</y>
+       <width>271</width>
+       <height>10</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <kerning>true</kerning>
+      </font>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
     <zorder>line_9</zorder>
@@ -1423,8 +1420,8 @@ Bit [6]: 0 for sending ADC values, 1 - for channel numbers </string>
     <zorder>label_21</zorder>
     <zorder>my_Clock</zorder>
     <zorder>label_22</zorder>
-    <zorder>my_Old_CARB</zorder>
     <zorder>my_CARB_Sim</zorder>
+    <zorder>line_11</zorder>
    </widget>
    <widget class="QWidget" name="Debug">
     <attribute name="title">

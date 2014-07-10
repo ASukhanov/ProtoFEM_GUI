@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dsvxtb.ui'
 #
-# Created: Wed Apr 09 10:51:23 2014
-#      by: PyQt4 UI code generator 4.9
+# Created: Wed Jul  9 12:10:06 2014
+#      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_dsvxtb(object):
     def setupUi(self, dsvxtb):
@@ -77,6 +86,7 @@ class Ui_dsvxtb(object):
         self.my_DAQ_Start.setFont(font)
         self.my_DAQ_Start.setObjectName(_fromUtf8("my_DAQ_Start"))
         self.my_DAQ_NEvents = QtGui.QLineEdit(self.tab)
+        self.my_DAQ_NEvents.setEnabled(False)
         self.my_DAQ_NEvents.setGeometry(QtCore.QRect(170, 90, 51, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
@@ -239,7 +249,7 @@ class Ui_dsvxtb(object):
         self.my_DAQ_Handshaking.setChecked(True)
         self.my_DAQ_Handshaking.setObjectName(_fromUtf8("my_DAQ_Handshaking"))
         self.label_14 = QtGui.QLabel(self.tab)
-        self.label_14.setGeometry(QtCore.QRect(50, 250, 111, 16))
+        self.label_14.setGeometry(QtCore.QRect(50, 240, 111, 16))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.label_14.setFont(font)
@@ -428,20 +438,21 @@ class Ui_dsvxtb(object):
         font.setPointSize(12)
         self.label_22.setFont(font)
         self.label_22.setObjectName(_fromUtf8("label_22"))
-        self.my_Old_CARB = QtGui.QCheckBox(self.tab)
-        self.my_Old_CARB.setGeometry(QtCore.QRect(10, 255, 51, 17))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.my_Old_CARB.setFont(font)
-        self.my_Old_CARB.setChecked(False)
-        self.my_Old_CARB.setObjectName(_fromUtf8("my_Old_CARB"))
         self.my_CARB_Sim = QtGui.QCheckBox(self.tab)
-        self.my_CARB_Sim.setGeometry(QtCore.QRect(170, 255, 41, 17))
+        self.my_CARB_Sim.setGeometry(QtCore.QRect(210, 240, 81, 17))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.my_CARB_Sim.setFont(font)
         self.my_CARB_Sim.setChecked(False)
         self.my_CARB_Sim.setObjectName(_fromUtf8("my_CARB_Sim"))
+        self.line_11 = QtGui.QFrame(self.tab)
+        self.line_11.setGeometry(QtCore.QRect(0, 228, 271, 10))
+        font = QtGui.QFont()
+        font.setKerning(True)
+        self.line_11.setFont(font)
+        self.line_11.setFrameShape(QtGui.QFrame.HLine)
+        self.line_11.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line_11.setObjectName(_fromUtf8("line_11"))
         self.tabWidget.addTab(self.tab, _fromUtf8(""))
         self.Debug = QtGui.QWidget()
         self.Debug.setObjectName(_fromUtf8("Debug"))
@@ -727,118 +738,116 @@ class Ui_dsvxtb(object):
         QtCore.QMetaObject.connectSlotsByName(dsvxtb)
 
     def retranslateUi(self, dsvxtb):
-        dsvxtb.setWindowTitle(QtGui.QApplication.translate("dsvxtb", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_COM_BAUD.setToolTip(QtGui.QApplication.translate("dsvxtb", "Baud rate, Standard:460800", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Connect.setToolTip(QtGui.QApplication.translate("dsvxtb", "Connect to serial port", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Connect.setText(QtGui.QApplication.translate("dsvxtb", "Connect", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setToolTip(QtGui.QApplication.translate("dsvxtb", "Slave number on the APB bus", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("dsvxtb", "UART:", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Download.setToolTip(QtGui.QApplication.translate("dsvxtb", "Download SVX4 chain using file SVX_config.txt", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Download.setText(QtGui.QApplication.translate("dsvxtb", "Download", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_NSVX4.setToolTip(QtGui.QApplication.translate("dsvxtb", "Number of SVX4s in chain", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_NSVX4.setText(QtGui.QApplication.translate("dsvxtb", "2", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Start.setToolTip(QtGui.QApplication.translate("dsvxtb", "Start DAQ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Start.setText(QtGui.QApplication.translate("dsvxtb", "Start DAQ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_NEvents.setToolTip(QtGui.QApplication.translate("dsvxtb", "<html><head/><body><p>Number of events to accept. </p><p>Used only with RS232 interface</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_NEvents.setText(QtGui.QApplication.translate("dsvxtb", "1e3", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("dsvxtb", "for", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("dsvxtb", "events", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Simulate.setToolTip(QtGui.QApplication.translate("dsvxtb", "Turn on event simulator", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Simulate.setText(QtGui.QApplication.translate("dsvxtb", "Simulate", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Writing.setToolTip(QtGui.QApplication.translate("dsvxtb", "Enable writing to disk", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Writing.setText(QtGui.QApplication.translate("dsvxtb", "Write to disk", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_SelfTrig.setToolTip(QtGui.QApplication.translate("dsvxtb", "Re-trigger after each event", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_SelfTrig.setText(QtGui.QApplication.translate("dsvxtb", "Self trigger", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Load_Sequencer.setToolTip(QtGui.QApplication.translate("dsvxtb", "Load sequencer file.\n"
-"Depending on setting of External trigger the file is sqn_trig_external.txt of sqn_trig_internal.txt", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Load_Sequencer.setText(QtGui.QApplication.translate("dsvxtb", "Load Sequencer", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_9.setText(QtGui.QApplication.translate("dsvxtb", "Initialization", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Channel_Numbers.setToolTip(QtGui.QApplication.translate("dsvxtb", "If selected, then channel numers will be sent out, otherwise - ADC values", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Channel_Numbers.setText(QtGui.QApplication.translate("dsvxtb", "Channel Numbers", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Interface.setToolTip(QtGui.QApplication.translate("dsvxtb", "DAQ destination interface", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_10.setText(QtGui.QApplication.translate("dsvxtb", "Interface", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Stop.setToolTip(QtGui.QApplication.translate("dsvxtb", "Stop DAQ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Stop.setText(QtGui.QApplication.translate("dsvxtb", "Stop", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_SlaveCSR.setToolTip(QtGui.QApplication.translate("dsvxtb", "<html><head/><body><p>Confiuration value. </p><p>Bit[7]: Simulation mode.<br/>In this mode bits [3:0] is the number of SVX4 to simulate.<br/>Bypass the carrier board: 0080</p><p>Bit [6]: 0 for sending ADC values, 1 - for channel numbers </p><p>CARB modules, when Bit[7]=0:<br/>Bits [5:0] refer to switches to be closed.</p><p><br/></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_SlaveCSR.setText(QtGui.QApplication.translate("dsvxtb", "0082", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Slave_CSR.setToolTip(QtGui.QApplication.translate("dsvxtb", "Configure slave board on the cable", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Slave_CSR.setText(QtGui.QApplication.translate("dsvxtb", "Load", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Label_Switches.setToolTip(QtGui.QApplication.translate("dsvxtb", "Status of switches [6:1]", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Label_Version.setToolTip(QtGui.QApplication.translate("dsvxtb", "Firmware version", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_11.setText(QtGui.QApplication.translate("dsvxtb", "Version", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_12.setText(QtGui.QApplication.translate("dsvxtb", "Switches", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_COM.setToolTip(QtGui.QApplication.translate("dsvxtb", "Available ports", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Calibration.setToolTip(QtGui.QApplication.translate("dsvxtb", "Calibration data. The sequenser file will be changed. ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Calibration.setText(QtGui.QApplication.translate("dsvxtb", "Calibration", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_CN.setToolTip(QtGui.QApplication.translate("dsvxtb", "Channels Numbers mode on Slave", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_13.setText(QtGui.QApplication.translate("dsvxtb", "CN", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_Handshaking.setText(QtGui.QApplication.translate("dsvxtb", "HandShaking", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_14.setText(QtGui.QApplication.translate("dsvxtb", "Carrier Boards", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Label_Switches_2.setToolTip(QtGui.QApplication.translate("dsvxtb", "Status of switches [6:1]", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_CN_2.setToolTip(QtGui.QApplication.translate("dsvxtb", "Channels Numbers mode on Slave", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_SlaveCSR_2.setToolTip(QtGui.QApplication.translate("dsvxtb", "Confiuration value. \n"
+        dsvxtb.setWindowTitle(_translate("dsvxtb", "Dialog", None))
+        self.my_COM_BAUD.setToolTip(_translate("dsvxtb", "Baud rate, Standard:460800", None))
+        self.my_Connect.setToolTip(_translate("dsvxtb", "Connect to serial port", None))
+        self.my_Connect.setText(_translate("dsvxtb", "Connect", None))
+        self.label_6.setToolTip(_translate("dsvxtb", "Slave number on the APB bus", None))
+        self.label_6.setText(_translate("dsvxtb", "UART:", None))
+        self.my_Download.setToolTip(_translate("dsvxtb", "Download SVX4 chain using file SVX_config.txt", None))
+        self.my_Download.setText(_translate("dsvxtb", "Download", None))
+        self.my_NSVX4.setToolTip(_translate("dsvxtb", "Number of SVX4s in chain", None))
+        self.my_NSVX4.setText(_translate("dsvxtb", "2", None))
+        self.my_DAQ_Start.setToolTip(_translate("dsvxtb", "Start DAQ", None))
+        self.my_DAQ_Start.setText(_translate("dsvxtb", "Start DAQ", None))
+        self.my_DAQ_NEvents.setToolTip(_translate("dsvxtb", "<html><head/><body><p>Number of events to accept. </p><p>Used only with RS232 interface</p></body></html>", None))
+        self.my_DAQ_NEvents.setText(_translate("dsvxtb", "1e3", None))
+        self.label_7.setText(_translate("dsvxtb", "for", None))
+        self.label_8.setText(_translate("dsvxtb", "events", None))
+        self.my_DAQ_Simulate.setToolTip(_translate("dsvxtb", "Turn on event simulator", None))
+        self.my_DAQ_Simulate.setText(_translate("dsvxtb", "Simulate", None))
+        self.my_DAQ_Writing.setToolTip(_translate("dsvxtb", "Enable writing to disk", None))
+        self.my_DAQ_Writing.setText(_translate("dsvxtb", "Write to disk", None))
+        self.my_DAQ_SelfTrig.setToolTip(_translate("dsvxtb", "Re-trigger after each event", None))
+        self.my_DAQ_SelfTrig.setText(_translate("dsvxtb", "Self trigger", None))
+        self.my_Load_Sequencer.setToolTip(_translate("dsvxtb", "Load sequencer file.\n"
+"Depending on setting of External trigger the file is sqn_trig_external.txt of sqn_trig_internal.txt", None))
+        self.my_Load_Sequencer.setText(_translate("dsvxtb", "Load Sequencer", None))
+        self.label_9.setText(_translate("dsvxtb", "Initialization", None))
+        self.my_Channel_Numbers.setToolTip(_translate("dsvxtb", "If selected, then channel numers will be sent out, otherwise - ADC values", None))
+        self.my_Channel_Numbers.setText(_translate("dsvxtb", "Channel Numbers", None))
+        self.my_DAQ_Interface.setToolTip(_translate("dsvxtb", "DAQ destination interface", None))
+        self.label_10.setText(_translate("dsvxtb", "Interface", None))
+        self.my_DAQ_Stop.setToolTip(_translate("dsvxtb", "Stop DAQ", None))
+        self.my_DAQ_Stop.setText(_translate("dsvxtb", "Stop", None))
+        self.my_SlaveCSR.setToolTip(_translate("dsvxtb", "<html><head/><body><p>Confiuration value. </p><p>Bit[7]: Simulation mode.<br/>In this mode bits [3:0] is the number of SVX4 to simulate.<br/>Bypass the carrier board: 0080</p><p>Bit [6]: 0 for sending ADC values, 1 - for channel numbers </p><p>CARB modules, when Bit[7]=0:<br/>Bits [5:0] refer to switches to be closed.</p><p><br/></p></body></html>", None))
+        self.my_SlaveCSR.setText(_translate("dsvxtb", "0082", None))
+        self.my_Slave_CSR.setToolTip(_translate("dsvxtb", "Configure slave board on the cable", None))
+        self.my_Slave_CSR.setText(_translate("dsvxtb", "Load", None))
+        self.my_Label_Switches.setToolTip(_translate("dsvxtb", "Status of switches [6:1]", None))
+        self.my_Label_Version.setToolTip(_translate("dsvxtb", "Firmware version", None))
+        self.label_11.setText(_translate("dsvxtb", "Version", None))
+        self.label_12.setText(_translate("dsvxtb", "Switches", None))
+        self.my_COM.setToolTip(_translate("dsvxtb", "Available ports", None))
+        self.my_Calibration.setToolTip(_translate("dsvxtb", "Calibration data. The sequenser file will be changed. ", None))
+        self.my_Calibration.setText(_translate("dsvxtb", "Calibration", None))
+        self.my_CN.setToolTip(_translate("dsvxtb", "Channels Numbers mode on Slave", None))
+        self.label_13.setText(_translate("dsvxtb", "CN", None))
+        self.my_DAQ_Handshaking.setText(_translate("dsvxtb", "HandShaking", None))
+        self.label_14.setText(_translate("dsvxtb", "Carrier Boards", None))
+        self.my_Label_Switches_2.setToolTip(_translate("dsvxtb", "Status of switches [6:1]", None))
+        self.my_CN_2.setToolTip(_translate("dsvxtb", "Channels Numbers mode on Slave", None))
+        self.my_SlaveCSR_2.setToolTip(_translate("dsvxtb", "Confiuration value. \n"
 "Bits [5:0] refer to switches to be closed, \n"
-"Bit [6]: 0 for sending ADC values, 1 - for channel numbers ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_SlaveCSR_2.setText(QtGui.QApplication.translate("dsvxtb", "001f", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Label_Version_2.setToolTip(QtGui.QApplication.translate("dsvxtb", "Firmware version", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Label_Switches_3.setToolTip(QtGui.QApplication.translate("dsvxtb", "Status of switches [6:1]", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_CN_3.setToolTip(QtGui.QApplication.translate("dsvxtb", "Channels Numbers mode on Slave", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Label_Version_3.setToolTip(QtGui.QApplication.translate("dsvxtb", "Firmware version", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_SlaveCSR_3.setToolTip(QtGui.QApplication.translate("dsvxtb", "Confiuration value. \n"
+"Bit [6]: 0 for sending ADC values, 1 - for channel numbers ", None))
+        self.my_SlaveCSR_2.setText(_translate("dsvxtb", "001f", None))
+        self.my_Label_Version_2.setToolTip(_translate("dsvxtb", "Firmware version", None))
+        self.my_Label_Switches_3.setToolTip(_translate("dsvxtb", "Status of switches [6:1]", None))
+        self.my_CN_3.setToolTip(_translate("dsvxtb", "Channels Numbers mode on Slave", None))
+        self.my_Label_Version_3.setToolTip(_translate("dsvxtb", "Firmware version", None))
+        self.my_SlaveCSR_3.setToolTip(_translate("dsvxtb", "Confiuration value. \n"
 "Bits [5:0] refer to switches to be closed, \n"
-"Bit [6]: 0 for sending ADC values, 1 - for channel numbers ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_SlaveCSR_3.setText(QtGui.QApplication.translate("dsvxtb", "001f", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_CN_4.setToolTip(QtGui.QApplication.translate("dsvxtb", "Channels Numbers mode on Slave", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Label_Switches_4.setToolTip(QtGui.QApplication.translate("dsvxtb", "Status of switches [6:1]", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Label_Version_4.setToolTip(QtGui.QApplication.translate("dsvxtb", "Firmware version", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_SlaveCSR_4.setToolTip(QtGui.QApplication.translate("dsvxtb", "Confiuration value. \n"
+"Bit [6]: 0 for sending ADC values, 1 - for channel numbers ", None))
+        self.my_SlaveCSR_3.setText(_translate("dsvxtb", "001f", None))
+        self.my_CN_4.setToolTip(_translate("dsvxtb", "Channels Numbers mode on Slave", None))
+        self.my_Label_Switches_4.setToolTip(_translate("dsvxtb", "Status of switches [6:1]", None))
+        self.my_Label_Version_4.setToolTip(_translate("dsvxtb", "Firmware version", None))
+        self.my_SlaveCSR_4.setToolTip(_translate("dsvxtb", "Confiuration value. \n"
 "Bits [5:0] refer to switches to be closed, \n"
-"Bit [6]: 0 for sending ADC values, 1 - for channel numbers ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_SlaveCSR_4.setText(QtGui.QApplication.translate("dsvxtb", "001f", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_NCARB.setToolTip(QtGui.QApplication.translate("dsvxtb", "Number of carrier boards in chain", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_NCARB.setText(QtGui.QApplication.translate("dsvxtb", "1", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Retrigger.setToolTip(QtGui.QApplication.translate("dsvxtb", "Test mode of data taking using RS232. ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Retrigger.setText(QtGui.QApplication.translate("dsvxtb", "Retrigger", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_15.setText(QtGui.QApplication.translate("dsvxtb", "<- Last Carrier", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_16.setText(QtGui.QApplication.translate("dsvxtb", "Last-1", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_17.setText(QtGui.QApplication.translate("dsvxtb", "Last-2", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_18.setText(QtGui.QApplication.translate("dsvxtb", "Last-3", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DAQ_ExTrig.setToolTip(QtGui.QApplication.translate("dsvxtb", "<html><head/><body><p>Trigger source:<br/>CLK - main clock<br/>LVDS - NIM or LVDS from FPGA.A15-A14<br/>OSC - from on-chip oscillator, asynchronous with the main clock<br/>TTL - from P4.7-9 (AD4)<br/>INT - internal, from sequencer</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_19.setText(QtGui.QApplication.translate("dsvxtb", "SVX4s", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_20.setText(QtGui.QApplication.translate("dsvxtb", "<html><head/><body><p>Trig Source</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_TrigFreq.setToolTip(QtGui.QApplication.translate("dsvxtb", "<html><head/><body><p>Trigger Frequency for CLK and USC sources </p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_21.setText(QtGui.QApplication.translate("dsvxtb", "<html><head/><body><p>Frequency</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Clock.setToolTip(QtGui.QApplication.translate("dsvxtb", "<html><head/><body><p>Clock Source</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_22.setText(QtGui.QApplication.translate("dsvxtb", "<html><head/><body><p>ClkSource</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Old_CARB.setToolTip(QtGui.QApplication.translate("dsvxtb", "Carrire boards with old (v17) firmware ", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Old_CARB.setText(QtGui.QApplication.translate("dsvxtb", "Old", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_CARB_Sim.setToolTip(QtGui.QApplication.translate("dsvxtb", "Turn on simulator on the carrier board", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_CARB_Sim.setText(QtGui.QApplication.translate("dsvxtb", "Sim", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("dsvxtb", "Work", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command_Recording.setToolTip(QtGui.QApplication.translate("dsvxtb", "Start command recording", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command_Recording.setText(QtGui.QApplication.translate("dsvxtb", "Record", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("dsvxtb", "s", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Exit.setToolTip(QtGui.QApplication.translate("dsvxtb", "Safe exit of the control session by closing all connections.\n"
-"The FEM is not affected and will continue running.", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Exit.setText(QtGui.QApplication.translate("dsvxtb", "Exit", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command_Repeat.setToolTip(QtGui.QApplication.translate("dsvxtb", "Execute recorded commands", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command_Repeat.setText(QtGui.QApplication.translate("dsvxtb", "Repeat", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Delay.setText(QtGui.QApplication.translate("dsvxtb", "Delay", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Status.setToolTip(QtGui.QApplication.translate("dsvxtb", "Status registers.", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Status.setText(QtGui.QApplication.translate("dsvxtb", "Status", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("dsvxtb", "times", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Stop.setToolTip(QtGui.QApplication.translate("dsvxtb", "Stop the repeating thread by sending \'xx\' command", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Stop.setText(QtGui.QApplication.translate("dsvxtb", "Stop", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Delay_Txt.setText(QtGui.QApplication.translate("dsvxtb", "0.1", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command_Repeat_NTimes.setToolTip(QtGui.QApplication.translate("dsvxtb", "How many times to repeat. Use 0 to see the list", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command_Repeat_NTimes.setText(QtGui.QApplication.translate("dsvxtb", "1", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("dsvxtb", "Command recorder", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Input.setToolTip(QtGui.QApplication.translate("dsvxtb", "Print register next to the Base register", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Input.setText(QtGui.QApplication.translate("dsvxtb", "Input", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Pulse.setText(QtGui.QApplication.translate("dsvxtb", "Pulse", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command.setText(QtGui.QApplication.translate("dsvxtb", "Command:", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Clear.setText(QtGui.QApplication.translate("dsvxtb", "Clear", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command_Txt.setToolTip(QtGui.QApplication.translate("dsvxtb", "Enter command line here, for help - enter help. \n"
+"Bit [6]: 0 for sending ADC values, 1 - for channel numbers ", None))
+        self.my_SlaveCSR_4.setText(_translate("dsvxtb", "001f", None))
+        self.my_NCARB.setToolTip(_translate("dsvxtb", "Number of carrier boards in chain", None))
+        self.my_NCARB.setText(_translate("dsvxtb", "1", None))
+        self.my_Retrigger.setToolTip(_translate("dsvxtb", "Test mode of data taking using RS232. ", None))
+        self.my_Retrigger.setText(_translate("dsvxtb", "Retrigger", None))
+        self.label_15.setText(_translate("dsvxtb", "<- Last Carrier", None))
+        self.label_16.setText(_translate("dsvxtb", "Last-1", None))
+        self.label_17.setText(_translate("dsvxtb", "Last-2", None))
+        self.label_18.setText(_translate("dsvxtb", "Last-3", None))
+        self.my_DAQ_ExTrig.setToolTip(_translate("dsvxtb", "<html><head/><body><p>Trigger source:<br/>CLK - main clock<br/>LVDS - NIM or LVDS from FPGA.A15-A14<br/>OSC - from on-chip oscillator, asynchronous with the main clock<br/>TTL - from P4.7-9 (AD4)<br/>INT - internal, from sequencer</p></body></html>", None))
+        self.label_19.setText(_translate("dsvxtb", "SVX4s", None))
+        self.label_20.setText(_translate("dsvxtb", "<html><head/><body><p>Trig Source</p></body></html>", None))
+        self.my_TrigFreq.setToolTip(_translate("dsvxtb", "<html><head/><body><p>Trigger Frequency for CLK and USC sources </p></body></html>", None))
+        self.label_21.setText(_translate("dsvxtb", "<html><head/><body><p>Frequency</p></body></html>", None))
+        self.my_Clock.setToolTip(_translate("dsvxtb", "<html><head/><body><p>Clock Source</p></body></html>", None))
+        self.label_22.setText(_translate("dsvxtb", "<html><head/><body><p>ClkSource</p></body></html>", None))
+        self.my_CARB_Sim.setToolTip(_translate("dsvxtb", "Turn on simulator on the carrier board", None))
+        self.my_CARB_Sim.setText(_translate("dsvxtb", "Simulate", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("dsvxtb", "Work", None))
+        self.my_Run_Command_Recording.setToolTip(_translate("dsvxtb", "Start command recording", None))
+        self.my_Run_Command_Recording.setText(_translate("dsvxtb", "Record", None))
+        self.label_3.setText(_translate("dsvxtb", "s", None))
+        self.my_Run_Exit.setToolTip(_translate("dsvxtb", "Safe exit of the control session by closing all connections.\n"
+"The FEM is not affected and will continue running.", None))
+        self.my_Run_Exit.setText(_translate("dsvxtb", "Exit", None))
+        self.my_Run_Command_Repeat.setToolTip(_translate("dsvxtb", "Execute recorded commands", None))
+        self.my_Run_Command_Repeat.setText(_translate("dsvxtb", "Repeat", None))
+        self.my_Run_Delay.setText(_translate("dsvxtb", "Delay", None))
+        self.my_Run_Status.setToolTip(_translate("dsvxtb", "Status registers.", None))
+        self.my_Run_Status.setText(_translate("dsvxtb", "Status", None))
+        self.label_4.setText(_translate("dsvxtb", "times", None))
+        self.my_Run_Stop.setToolTip(_translate("dsvxtb", "Stop the repeating thread by sending \'xx\' command", None))
+        self.my_Run_Stop.setText(_translate("dsvxtb", "Stop", None))
+        self.my_Run_Delay_Txt.setText(_translate("dsvxtb", "0.1", None))
+        self.my_Run_Command_Repeat_NTimes.setToolTip(_translate("dsvxtb", "How many times to repeat. Use 0 to see the list", None))
+        self.my_Run_Command_Repeat_NTimes.setText(_translate("dsvxtb", "1", None))
+        self.label_2.setText(_translate("dsvxtb", "Command recorder", None))
+        self.my_Run_Reg_Input.setToolTip(_translate("dsvxtb", "Print register next to the Base register", None))
+        self.my_Run_Reg_Input.setText(_translate("dsvxtb", "Input", None))
+        self.my_Run_Reg_Pulse.setText(_translate("dsvxtb", "Pulse", None))
+        self.my_Run_Command.setText(_translate("dsvxtb", "Command:", None))
+        self.my_Run_Reg_Clear.setText(_translate("dsvxtb", "Clear", None))
+        self.my_Run_Command_Txt.setToolTip(_translate("dsvxtb", "Enter command line here, for help - enter help. \n"
 "Useful debugging commands:\n"
 "w0 #: pulse bits in CSR\n"
 "w1 #: set bits in CSR\n"
@@ -849,30 +858,30 @@ class Ui_dsvxtb(object):
 "r/w320: read/write Sequencer\n"
 "r/w384: read/write SPI\n"
 "\n"
-"", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Command_Txt.setText(QtGui.QApplication.translate("dsvxtb", "h", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Read.setToolTip(QtGui.QApplication.translate("dsvxtb", "Read register, specified in Base", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Read.setText(QtGui.QApplication.translate("dsvxtb", "Read", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Set.setText(QtGui.QApplication.translate("dsvxtb", "Set", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Add.setText(QtGui.QApplication.translate("dsvxtb", "Add", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg_Value.setText(QtGui.QApplication.translate("dsvxtb", "0x00000000", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setToolTip(QtGui.QApplication.translate("dsvxtb", "Slave number on the APB bus", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("dsvxtb", "Base", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Reg.setToolTip(QtGui.QApplication.translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"", None))
+        self.my_Run_Command_Txt.setText(_translate("dsvxtb", "h", None))
+        self.my_Run_Reg_Read.setToolTip(_translate("dsvxtb", "Read register, specified in Base", None))
+        self.my_Run_Reg_Read.setText(_translate("dsvxtb", "Read", None))
+        self.my_Run_Reg_Set.setText(_translate("dsvxtb", "Set", None))
+        self.my_Run_Reg_Add.setText(_translate("dsvxtb", "Add", None))
+        self.my_Run_Reg_Value.setText(_translate("dsvxtb", "0x00000000", None))
+        self.label.setToolTip(_translate("dsvxtb", "Slave number on the APB bus", None))
+        self.label.setText(_translate("dsvxtb", "Base", None))
+        self.my_Run_Reg.setToolTip(_translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Arial\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Base register. <br />  0: CMDR. read/write. Command register, APB3_SBO_0 in the design</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> 64: STATR. read only. Status register. APB3_R32_0</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">128: CHIPSKOP. ro. APB3_R32_1<br />192: OUTFIFO. ro. APB3_R32_2<br />256: TLK_RXD. ro. APB3_R32_3</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Dbg_Verbosity.setText(QtGui.QApplication.translate("dsvxtb", "Verbosity", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Chipskop_Arm.setToolTip(QtGui.QApplication.translate("dsvxtb", "Arm Chipskop. It will run until trigger comes", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Chipskop_Arm.setText(QtGui.QApplication.translate("dsvxtb", "Arm", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Chipskop.setToolTip(QtGui.QApplication.translate("dsvxtb", "Send the Chipskop data, Chipskop is an internal logic analizer.", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Chipskop.setText(QtGui.QApplication.translate("dsvxtb", "Chipskop", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Chipskop_Trig.setToolTip(QtGui.QApplication.translate("dsvxtb", "Trigger the Chipskop. The chipskop data are ready for viewing", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_Chipskop_Trig.setText(QtGui.QApplication.translate("dsvxtb", "Trig", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Dbg_Verbosity_Txt.setToolTip(QtGui.QApplication.translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">128: CHIPSKOP. ro. APB3_R32_1<br />192: OUTFIFO. ro. APB3_R32_2<br />256: TLK_RXD. ro. APB3_R32_3</p></body></html>", None))
+        self.my_Dbg_Verbosity.setText(_translate("dsvxtb", "Verbosity", None))
+        self.my_Run_Chipskop_Arm.setToolTip(_translate("dsvxtb", "Arm Chipskop. It will run until trigger comes", None))
+        self.my_Run_Chipskop_Arm.setText(_translate("dsvxtb", "Arm", None))
+        self.my_Run_Chipskop.setToolTip(_translate("dsvxtb", "Send the Chipskop data, Chipskop is an internal logic analizer.", None))
+        self.my_Run_Chipskop.setText(_translate("dsvxtb", "Chipskop", None))
+        self.my_Run_Chipskop_Trig.setToolTip(_translate("dsvxtb", "Trigger the Chipskop. The chipskop data are ready for viewing", None))
+        self.my_Run_Chipskop_Trig.setText(_translate("dsvxtb", "Trig", None))
+        self.my_Dbg_Verbosity_Txt.setToolTip(_translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Arial\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
@@ -886,35 +895,35 @@ class Ui_dsvxtb(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt;\">0x40 - super detailed info</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt;\">0x100 - disable check</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt;\">0x200 - jumper instead of SRC</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt;\">0x400 - disable event sending</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Dbg_Verbosity_Txt.setText(QtGui.QApplication.translate("dsvxtb", "3", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_EFROM.setToolTip(QtGui.QApplication.translate("dsvxtb", "Print content of Flash ROM memory.", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Run_EFROM.setText(QtGui.QApplication.translate("dsvxtb", "EFROM", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_CTest.setToolTip(QtGui.QApplication.translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt;\">0x400 - disable event sending</span></p></body></html>", None))
+        self.my_Dbg_Verbosity_Txt.setText(_translate("dsvxtb", "3", None))
+        self.my_Run_EFROM.setToolTip(_translate("dsvxtb", "Print content of Flash ROM memory.", None))
+        self.my_Run_EFROM.setText(_translate("dsvxtb", "EFROM", None))
+        self.my_CTest.setToolTip(_translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Arial\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test of the serial control protocol (\'t0\').<br />The commands are sent over SO line and it is checked for proper bit settng in the command register.  </p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_CTest.setText(QtGui.QApplication.translate("dsvxtb", "CTest", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("dsvxtb", "Registers manipulation", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Help.setText(QtGui.QApplication.translate("dsvxtb", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Reset.setToolTip(QtGui.QApplication.translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test of the serial control protocol (\'t0\').<br />The commands are sent over SO line and it is checked for proper bit settng in the command register.  </p></body></html>", None))
+        self.my_CTest.setText(_translate("dsvxtb", "CTest", None))
+        self.label_5.setText(_translate("dsvxtb", "Registers manipulation", None))
+        self.my_Help.setText(_translate("dsvxtb", "Help", None))
+        self.my_Reset.setToolTip(_translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Arial\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test of the serial control protocol (\'t\').<br />The commands are sent over SO line and it is checked for proper bit settng in the command register.  </p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_Reset.setText(QtGui.QApplication.translate("dsvxtb", "Reset", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DumpFIFO.setToolTip(QtGui.QApplication.translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test of the serial control protocol (\'t\').<br />The commands are sent over SO line and it is checked for proper bit settng in the command register.  </p></body></html>", None))
+        self.my_Reset.setText(_translate("dsvxtb", "Reset", None))
+        self.my_DumpFIFO.setToolTip(_translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Arial\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test of the serial control protocol (\'t\').<br />The commands are sent over SO line and it is checked for proper bit settng in the command register.  </p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_DumpFIFO.setText(QtGui.QApplication.translate("dsvxtb", "FIFO", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_STest.setToolTip(QtGui.QApplication.translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test of the serial control protocol (\'t\').<br />The commands are sent over SO line and it is checked for proper bit settng in the command register.  </p></body></html>", None))
+        self.my_DumpFIFO.setText(_translate("dsvxtb", "FIFO", None))
+        self.my_STest.setToolTip(_translate("dsvxtb", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Arial\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test of the serial control protocol with sequenser (\'t1\').<br />  </p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.my_STest.setText(QtGui.QApplication.translate("dsvxtb", "STest", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Debug), QtGui.QApplication.translate("dsvxtb", "Debug", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test of the serial control protocol with sequenser (\'t1\').<br />  </p></body></html>", None))
+        self.my_STest.setText(_translate("dsvxtb", "STest", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Debug), _translate("dsvxtb", "Debug", None))
 
