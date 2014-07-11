@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 		exit(-2);
 	    }
         }
-        if(verbosity & VERB_MLOG) printf("File %s, %i files to go.\n",pathname,nFiles);
+        if(verbosity) printf("File %s, %i files to go.\n",pathname,nFiles);
         for(gEvN=-1;gEvN<nEvents-1;)
         {
             if(verbosity & VERB_XLOG) printf("record %i\n",gEvN);
@@ -243,13 +243,13 @@ int main(int argc, char **argv)
             {
                 if(gEvN > 0)  
                 {
-                    printf("DAQ run %s stopped by operator after %i events\n",filename,gEvN);
+                    if (verbosity) printf("DAQ run %s stopped by operator after %i events\n",filename,gEvN);
                     break;   //run stopped
                 }
-                if(gEvN < 0) { gEvN = 0 ; printf("DAQ run not started\n");}
+                if(gEvN < 0) { gEvN = 0 ; if (verbosity) printf("DAQ run not started\n");}
             }
             else gEvN++;
-            if(gEvN == 1) printf("DAQ run started\n");
+            if(gEvN == 1) if (verbosity) printf("DAQ run started\n");
             if((gEvN % 100)==1)
             {
                 time(&curtim);
@@ -257,7 +257,7 @@ int main(int argc, char **argv)
 		if(seconds>=10.) 
                 {
                    tmt = curtim;
-                   if(verbosity & VERB_MLOG) printf("Event %i[%i], %.1f ev/s\n",gEvN,rc,(double)(gEvN-prevEvN)/seconds);
+                   if(verbosity) printf("Event %i[%i], %.1f ev/s\n",gEvN,rc,(double)(gEvN-prevEvN)/seconds);
                    prevEvN=gEvN;
                 }
             }
