@@ -1,8 +1,9 @@
 /* SPI reader
 *
 *   2014-07-10  AS, Version 1.
+*   2014-07-11  AS. V2. spi_speed = 8MHz, delayEv=1ms
 */
-char* gVersion = "1";
+char* gVersion = "2";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,7 +52,13 @@ typedef unsigned long DWORD;
 
 int gEvN = 0;
 int gExtraWords = 0;
-int verbosity = 1;
+
+#define VERB_MLOG 1	//minimal log
+#define VERB_ERR 2	//errors
+#define VERB_DUMP 4	//extended log
+#define VERB_XLOG 8	//dump
+int verbosity = 3;
+
 
 void dumpbuf(unsigned char *buf, int nbytes)
 {
@@ -79,7 +86,7 @@ int trim_event(unsigned char *data)
     if(data[4] != 0xf0 || data[5] != 0xc1) 
     {
         if(data[0]==0xff && data[1]==0xff) return -1;   //all ff's - run stopped
-        printf("ERROR in event format, event %d, ID: %02x%02x\n",gEvN,data[4],data[5]);
+        if(verbosity & VERB_ERR) printf("ERROR in event format, event %d, ID: %02x%02x\n",gEvN,data[4],data[5]);
         return 0;
     }
     fevhl = data[11]&0xf;
@@ -87,11 +94,11 @@ int trim_event(unsigned char *data)
     fevnasics = ((data[3])>>4)&0xf;
     fevchains = data[3]&0xf;
     evl = (fevhl + fevtl + gExtraWords)*2 + fevnasics*BYTES_PEE_ASIC;
-    if(verbosity&8) printf("hl=%i. tl=%i, na=%i, nc=%i, el=%i\n",fevhl, fevtl, fevnasics, fevchains, evl); 
+    if(verbosity & VERB_DUMP) printf("hl=%i. tl=%i, na=%i, nc=%i, el=%i\n",fevhl, fevtl, fevnasics, fevchains, evl); 
     //check, if trailer is correct
     if((data[evl-4] != 0xfe) || (data[evl-3] != 0x0d))
     {
-        printf("ERROR. Event trailer wrong %02x%02x != fe0d\n",data[evl-4],data[evl-3]);
+        if(verbosity & VERB_ERR) printf("ERROR. Event trailer wrong %02x%02x != fe0d\n",data[evl-4],data[evl-3]);
     }
     return evl;
 }
@@ -100,21 +107,22 @@ int main(int argc, char **argv)
 {
     int rc;
     int nFiles=1, nEvents=0;
-    int nBytes=290; //2 SVX4s + 4 
+    int nBytes=290; //2 SVX4s + 4
     #define BUFSIZE 2048
     unsigned char buf[BUFSIZE];
     unsigned char *pdata = buf;
-    int spi_speed = 500000, spi_channel = 0;
+    int spi_speed = 8000000; // SPI clock frequency, 8 MHz is OK with short cable. 0.5 MHz is minimal;
+    int delayEv   = 1;	     // Delay between polling for event in ms, 1 is good for 8 MHz cloc
+    int spi_channel = 0;
     int help = 0;
     int trim_events = 0;
     int writing_enabled = 1;
-    FILE *ff = NULL; 
+    FILE *ff = NULL;
     int filesize = 0;
     time_t tmt,curtim;
     double seconds;
     int prevEvN=0;
     struct tm * timeptr;
-    int delayEv=5;
     int arg;
     #define FNSIZE 128
     char filename[FNSIZE] ={0};
@@ -123,7 +131,7 @@ int main(int argc, char **argv)
     char dirname[DNSIZE];
     char lastfn[40];
     //unsigned int prevMillis=0,curMillis,diffMillis;
-    
+
     strncpy(dirname,gDirName,DNSIZE);
     for (arg = 1; arg < argc; arg++)
     {
@@ -150,7 +158,7 @@ int main(int argc, char **argv)
             case 'W':
                 writing_enabled = 0;
                 printf("Recording disabled.\n");
-                break;                          
+                break;
             case 'H':
                 help = 1;
                 break;
@@ -171,25 +179,26 @@ int main(int argc, char **argv)
                 break;
             }
         }
-        if(help)
-        {
-            printf("SPI Recorder for Raspberry Pi, version %s\n",gVersion);
-            printf("Usage:  spispool [options]\n");
-            printf( "   Available options:\n");
-            printf( "   -h  : show help message\n");
-            printf( "   -vN : verbosity level\n");
-            printf( "   -fN : number of files to read, default: 1\n");
-            printf( "   -eN : number of transfers (events)per file\n");
-            printf( "   -lN : max length of the transfer, default: %i\n",nBytes);
-            printf( "   -PN : pause between events in milliseconds\n");
-            printf( "   -sN : SPI clock frequency 500,000 (default) through 32,000,000\n");
-            printf( "   -t  : trim events to correct size\n");
-            printf( "   -w  : disable writing to file\n");
-            printf( "   -dT : data directory, default: /run/shm\n");
-            printf( "   -xN : number of extra words in the event\n");
-            return(0);
-        }
     }
+    if(help || argc == 1)
+    {
+       printf("SPI Recorder for Raspberry Pi, version %s\n",gVersion);
+       printf("Usage:  spispool [options]\n");
+       printf( "   Available options:\n");
+       printf( "   -h  : show help message\n");
+       printf( "   -vN : verbosity level\n");
+       printf( "   -fN : number of files to read, default: 1\n");
+       printf( "   -eN : number of transfers (events)per file\n");
+       printf( "   -lN : max length of the transfer, default: %i\n",nBytes);
+       printf( "   -pN : pause between events in milliseconds\n");
+       printf( "   -sN : SPI clock frequency 500,000 (default) through 32,000,000\n");
+       printf( "   -t  : trim events to correct size\n");
+       printf( "   -w  : disable writing to file\n");
+       printf( "   -dT : data directory, default: /run/shm\n");
+       printf( "   -xN : number of extra words in the event\n");
+       return(0);
+    }
+
     if(writing_enabled) 
         printf("Recording %i files with %i events[%i] per file to directory %s\n",nFiles,nEvents,nBytes,dirname);
     spi_open(spi_channel,spi_speed);
@@ -220,12 +229,12 @@ int main(int argc, char **argv)
 		exit(-2);
 	    }
         }
-        if(verbosity&1) printf("File %s, %i files to go.\n",pathname,nFiles);
-        for(gEvN=-1;gEvN<nEvents;)
+        if(verbosity & VERB_MLOG) printf("File %s, %i files to go.\n",pathname,nFiles);
+        for(gEvN=-1;gEvN<nEvents-1;)
         {
-            if(verbosity&8) printf("record %i\n",gEvN);
+            if(verbosity & VERB_XLOG) printf("record %i\n",gEvN);
             rc = spi_read(spi_channel,buf,nBytes);
-            if(verbosity&8) dumpbuf(buf, rc);
+            if(verbosity & VERB_XLOG) dumpbuf(buf, rc);
             if(delayEv)   delay_ms(delayEv);
             if(trim_events) rc = trim_event(buf);
             pdata = buf + EVOFFSET;
@@ -248,13 +257,13 @@ int main(int argc, char **argv)
 		if(seconds>=10.) 
                 {
                    tmt = curtim;
-                   if(verbosity&1) printf("Event %i[%i], %.1f ev/s\n",gEvN,rc,(double)(gEvN-prevEvN)/seconds);
+                   if(verbosity & VERB_MLOG) printf("Event %i[%i], %.1f ev/s\n",gEvN,rc,(double)(gEvN-prevEvN)/seconds);
                    prevEvN=gEvN;
                 }
             }
             if(rc<=0) continue;
-            if(verbosity&2) printf("Event %i[%i]\n",gEvN,rc);
-            if(verbosity&4) dumpbuf(pdata, rc);
+            if(verbosity & VERB_DUMP) printf("Event %i[%i]\n",gEvN,rc);
+            if(verbosity & VERB_DUMP) dumpbuf(pdata, rc);
             if(ff) fwrite(pdata,1,rc,ff);
         }
         if(ff) 
