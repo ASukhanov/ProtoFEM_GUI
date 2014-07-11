@@ -31,7 +31,7 @@
 #150:156 ID[6:0]
  0010000
 #157 RTPS. Real Time Pedestal Subtraction disable
- 0
+ 1
 #158 Rd127. Always readout ch.127 regardless of hit status
  1
 #159 Rd63. Always readout ch.63 regardless of hit status 
